@@ -1,12 +1,11 @@
 Package: ns.survival.code
-Title: What the Package Does (One Line, Title Case)
+Title: R code for working with survival data
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Nicholas", "Stroustrup", , "nstroustrup@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-9530-7301"))
+Description: R code for working with survival data March 2022
+License: 
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
