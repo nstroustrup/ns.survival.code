@@ -1,6 +1,3 @@
-library(compiler);
-library(survival);
-
 ns_area_between_km = cmpfun(function(t_a,t_b,s_a,s_b,distance_norm=1){
 	#calculates the area between two kaplan meier survival curves
 	#if the last event is censored for one curve,

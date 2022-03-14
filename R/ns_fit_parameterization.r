@@ -1,11 +1,4 @@
 
-library("rms");
-library("flexsurv");
-library("STAR");
-#detach("package:eha", unload=TRUE)
-library("eha");
-library("gsl")
-
 ns_pweiner_diff= function(t,b){
 	return( 
 		( b/sqrt(2*(pi*t)^3) )*

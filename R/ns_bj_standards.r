@@ -1,5 +1,3 @@
-library("rms")
-
 ns_survfit_truncate_trailing_censoring = function(formula){
 	options(datadist=NULL)
 	f = terms(formula);

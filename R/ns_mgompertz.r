@@ -1,5 +1,4 @@
 
-library(eha);
 pmgompertz <- function (q, shape = 1, rate = 1,theta=1,log.p=F) 
 {
     if (any(c(theta,rate) <= 0)) {

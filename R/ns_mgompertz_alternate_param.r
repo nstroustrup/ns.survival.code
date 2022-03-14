@@ -1,4 +1,3 @@
-library(eha);
 pmgompertz2 <- function (q, initial = 1, scale = 1,theta=1,log.p=F) {
 	theta[theta<.0000001] = .0000001
 	return(pmgompertz(q,shape=initial/scale,rate=scale,theta=theta,log.p=log.p))

@@ -1,10 +1,3 @@
-library("survival");
-library("rms");
-library(muhaz)
-library("zoo");
-library(compiler)
-library(bshazard)
-
 ns_lighten<-function(x,val=.75){
 	x = x+val;
 	if (x>1)
