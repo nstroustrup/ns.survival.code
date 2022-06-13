@@ -1,4 +1,5 @@
-ns_area_between_km = cmpfun(function(t_a,t_b,s_a,s_b,distance_norm=1){
+#' @export
+ns_area_between_km = compiler::cmpfun(function(t_a,t_b,s_a,s_b,distance_norm=1){
 	#calculates the area between two kaplan meier survival curves
 	#if the last event is censored for one curve,
 	#the difference between the two curves is only calculated up to that point.
@@ -108,7 +109,8 @@ ns_area_between_km = cmpfun(function(t_a,t_b,s_a,s_b,distance_norm=1){
 })
 
 
-ns_calculate_a_b_n =cmpfun(
+
+ns_calculate_a_b_n =compiler::cmpfun(
 function (s){
 
 	#total number of deaths or censored events
@@ -370,7 +372,7 @@ ns_P = function(V,R){
 	 )
 
 }
-
+#' @export
 ns_ks_test_ = function(s1,s2,one_sided=F,return_timeseries=F){
 	N1 = length(s1[,1])
 	N2 = length(s2[,1])
@@ -416,9 +418,10 @@ ns_ks_test_ = function(s1,s2,one_sided=F,return_timeseries=F){
 					Y=abn[,'Y'])
 					));
 }
+#' @export
+ns_ks_test = compiler::cmpfun(ns_ks_test_,options=list(optimize=3) )
 
-ns_ks_test = cmpfun(ns_ks_test_,options=list(optimize=3) )
-
+#' @export
 ns_ks_test_group = function (formula,reference_group,one_sided=F,return_timeseries=F){
 	f = terms(formula);
 	r = eval.parent(attr(f,"variables"))

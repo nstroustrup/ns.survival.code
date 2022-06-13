@@ -12,7 +12,8 @@ ns_lighten_color = function(x,val=.75,opacity=1){
 }
 
 #some code taken from muhaz
-ns_kp_haz = cmpfun(function (time, status, strata, q = 1, min_dt=1, method = "nelson",age_adjustment=data.frame(age=c(1),adjustment=c(1))) 
+#' @export
+ns_kp_haz = compiler::cmpfun(function (time, status, strata, q = 1, min_dt=1, method = "nelson",age_adjustment=data.frame(age=c(1),adjustment=c(1))) 
 {
     if (missing(time)) 
         stop("Argument \"time\" is missing, with no default")
@@ -135,6 +136,7 @@ ns_kp_haz = cmpfun(function (time, status, strata, q = 1, min_dt=1, method = "ne
     else return(list(time = time, haz = haz, var = var))
 })
 #some code taken from muhaz
+#' @export
 ns_kp_cause_specific_haz = function (time, status, strata, q = 1, min_dt=1, method = "nelson",causes,age_adjustment=data.frame(age=c(1),adjustment=c(1))) 
 {
     if (missing(time)) 
@@ -283,6 +285,7 @@ ns_kp_cause_specific_haz = function (time, status, strata, q = 1, min_dt=1, meth
 
 
 
+#' @export
 ns_plot_hazard_by_groups <- function(deaths,group_column_name,
 					level_colors,style_colors=NA,style_lty=NA,style_line_thickness=NA,
 					style=c("km"),
@@ -1059,6 +1062,7 @@ interleave <- function(v1,v2){
 	return (c(v1,v2)[order(c(ord1,ord2))])
 }
 
+#' @export
 ns_plot_colored_hazard_by_groups <- function(deaths,group_column_name,
 					color_scheme="rainbow",
 					color_column=NA,
@@ -1150,6 +1154,7 @@ ns_plot_colored_hazard_by_groups <- function(deaths,group_column_name,
 }
 
 
+#' @export
 ns_plot_colored_hazard_by_groups_with_legend<- function(deaths,group_column_name,legend_position="topleft",legend_title="",...){
 	color_and_styles = 
 		ns_plot_colored_hazard_by_groups(deaths,group_column_name=group_column_name,...);

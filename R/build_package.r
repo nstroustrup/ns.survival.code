@@ -1,5 +1,6 @@
 if (0){
 	setwd("")
 	library(devtools)
-	install("../ns.survival.code")
+	devtools::document("../ns,survival.code")
+	devtools::install("../ns.survival.code")
 }

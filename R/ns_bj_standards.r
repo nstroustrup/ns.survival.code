@@ -61,6 +61,7 @@ ns_process_bj_result = function(ret_prop,return_coefficients,bj_group,reference_
 		return (exp(bj_residual[,1]));
 	}
 }
+#' @export
 ns_single_bj_group = function(formula,reference_group=NA,return_coefficients=T,dbg=F){
 	options(datadist=NULL)
 	f = terms(formula);
@@ -84,6 +85,7 @@ ns_single_bj_group = function(formula,reference_group=NA,return_coefficients=T,d
 #	if (dbg)browser()
 	return(ns_process_bj_result(ret_prop,return_coefficients,bj_group,reference_group,dbg));
 }
+#' @export
 ns_single_bj = function(deaths,
 			reference_label=NA,
 			bj_group_column="bj_group",
@@ -129,7 +131,7 @@ ns_test_bj_effect_on_KS = function(deaths,bj_result,group_column,number_of_repli
 	}
 	return (Y);
 }
-
+#' @export
 ns_multiple_bj = function(deaths,
 			bj_group_column="bj_group",
 			bj_group_2_column="Plate.Name",

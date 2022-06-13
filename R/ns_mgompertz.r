@@ -1,4 +1,5 @@
 
+#' @export
 pmgompertz <- function (q, shape = 1, rate = 1,theta=1,log.p=F) 
 {
     if (any(c(theta,rate) <= 0)) {
@@ -20,6 +21,7 @@ pmgompertz <- function (q, shape = 1, rate = 1,theta=1,log.p=F)
     return(ret)
 }
 
+#' @export
 qmgompertz<- function (q, shape = 1, rate = 1,theta=1,log.p=F) 
 {	
     if (any(c(rate,theta) <= 0)) {
@@ -46,6 +48,7 @@ qmgompertz<- function (q, shape = 1, rate = 1,theta=1,log.p=F)
 }
 
 
+#' @export
 dmgompertz <- function (x, shape = 1, rate = 1,theta=1,log=F) 
 {
     if (any(c( rate,theta) <= 0)) {
@@ -64,11 +67,11 @@ dmgompertz <- function (x, shape = 1, rate = 1,theta=1,log=F)
     return(ret)
 }
 
+if (0){
 a=.1;
 b = 1;
 theta = .000000000001;
 #theta = .1;
-if (0){
 	x = seq(from=0,to=10,by=.1)
 	tt = dmgompertz(x,b,a,theta,log=T)
 	tt1 = flexsurv::dgompertz(x,b,a,log=T)
@@ -99,6 +102,7 @@ if (0){
 	lines(x,tt1,lty=2);
 }
 
+#' @export
 pns_makeham <- function(q, shape,rate,makeham,lower.tail = TRUE, log.p = FALSE){
 			if (any(c(shape,1/rate,makeham) <= 0)) {
 				warning(paste("Non-positive shape, rate: ",shape, rate))
@@ -106,6 +110,7 @@ pns_makeham <- function(q, shape,rate,makeham,lower.tail = TRUE, log.p = FALSE){
 			}		
 			return(eha::pmakeham(q,shape=c(shape,makeham),scale=1/rate,lower.tail,log.p));
 		}
+#' @export
 qns_makeham <- function(p, shape,rate,makeham,lower.tail = TRUE, log.p = FALSE){
 			if (any(c(shape,1/rate,makeham) <= 0)) {
 					warning(paste("Non-positive shape, rate: ",shape, rate))
@@ -113,6 +118,7 @@ qns_makeham <- function(p, shape,rate,makeham,lower.tail = TRUE, log.p = FALSE){
 			}
 			return(eha::qmakeham(p,shape=c(shape,makeham),scale=1/rate,lower.tail,log.p));
 		}
+#' @export
 dns_makeham <- 	function(x, shape,rate,makeham,log = FALSE,debug=T){
 			if(debug)
 			params <<- list(x=x,shape=shape,rate=rate,makeham=makeham)
@@ -124,6 +130,7 @@ dns_makeham <- 	function(x, shape,rate,makeham,log = FALSE,debug=T){
 			return(eha::dmakeham(x,shape=c(shape,makeham),scale=1/rate,log));
 		}
 
+#' @export
 custom.mgompertz <- list(name="mgompertz",
 	pars=c("shape","rate","theta"),
 	location="rate",
@@ -131,6 +138,7 @@ custom.mgompertz <- list(name="mgompertz",
 	inv.transforms=c(base::identity, base::exp,base::exp),
 	inits=function(t){ c(0,1 / mean(t),1) })
 
+#' @export
 custom.makeham <- list(name="ns_makeham",
 	pars=c("shape","rate","makeham"),
 	location="rate",

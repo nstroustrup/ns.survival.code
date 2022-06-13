@@ -50,7 +50,7 @@ if (0){
 
 
 #STAR::pinvgauss modified to correctly handle very small sigma2
-ns_pinvgauss =cmpfun(function (q, mu = 1, sigma2 = 1, boundary = NULL, lower.tail = TRUE, log.p = FALSE) {
+ns_pinvgauss =compiler::cmpfun(function (q, mu = 1, sigma2 = 1, boundary = NULL, lower.tail = TRUE, log.p = FALSE) {
 	#print(paste(mu,sigma2));
     if (any(q < 0)) 
         stop("q must contain positive values")
@@ -108,7 +108,7 @@ ns_pinvgauss =cmpfun(function (q, mu = 1, sigma2 = 1, boundary = NULL, lower.tai
 })
 pns_invgauss = ns_pinvgauss;
 
-dns_invgauss = cmpfun(function (x, mu = 1, sigma2 = 1, boundary = NULL, log = FALSE) 
+dns_invgauss = compiler::cmpfun(function (x, mu = 1, sigma2 = 1, boundary = NULL, log = FALSE) 
 {
     if (any(x <= 0)) 
         stop("y must contain positive values")
@@ -133,7 +133,7 @@ dns_invgauss = cmpfun(function (x, mu = 1, sigma2 = 1, boundary = NULL, log = FA
     tmp
 })
 
-qns_invgauss = cmpfun(function(p, mu = 1, sigma2 = 1, boundary = NULL) 
+qns_invgauss = compiler::cmpfun(function(p, mu = 1, sigma2 = 1, boundary = NULL) 
 {
     if (any(p < 0 | p > 1)) 
         stop("p must lie between 0 and 1")
@@ -223,7 +223,7 @@ ns_invgaussMLE = function (yi, ni = numeric(length(yi)) + 1, si = numeric(length
     ci <- ni - si
     c.dot <- sum(ci)
     
-     minusLogLik <- cmpfun(function(p) {
+     minusLogLik <- compiler::cmpfun(function(p) {
             if (missing(p)) {
                 txt <- paste("This function argument should be a 2 component vector:\n", 
                     "  component 1 is the log of the mu parameter,\n", 
@@ -339,6 +339,7 @@ ns_fit_invgauss <-function(surv_obj,inits=NA){
 	return(list( mu = invg$estimate[1],sigma2 = invg$estimate[2],AIC=AIC,upper=upper,lower=lower))
 }
 
+#' @export
 ns_fit_parameterization_group = function(formula,parametric_fits){
 	ff = terms(formula);
 	rr = eval.parent(attr(ff,"variables"))
@@ -364,6 +365,7 @@ ns_fit_parameterization_group = function(formula,parametric_fits){
 	return(list(fits=fits,successful_fits=successful_fits));
 }
 
+#' @export
 ns_fit_parameterization <- function(deaths,parametric_fits=NA,death_column="Age.at.Death..d..Raw",censored_column="Censored",rev_censored_group=T){
 
 	lognormal_scale <- NA;
@@ -925,6 +927,7 @@ ns_one_sided_ks_test=function(deaths,parameters,parameterization){
 	return (p);
 }
 
+#' @export
 ns_get_parametric_survival = function(tt,parameters,parameterization,survival_by="survival"){
 	if (survival_by=="quantile"){
 		suffix="q";

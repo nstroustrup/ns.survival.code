@@ -42,21 +42,29 @@ ns_parse_survival_output = function(x){
 	#browser()
 	return(tmp);
 }
+#' @export
 ns_survival_median <- function(x){
        return(ns_parse_survival_output(x)[["median"]]);
 }
+#' @export
 ns_survival_mean <- function(x){
        return(ns_parse_survival_output(x)[["*rmean"]]);
 }
 
+
+#' @export
 ns_survival_stderr <- function(x) {
 	return(ns_parse_survival_output(x)[["*se(rmean)"]])
 }
 
+
+#' @export
 ns_survival_statistcs <- function(x) {
 	return(ns_parse_survival_output(x))
 }
 
+
+#' @export
 ns_survival_median <- function(x){
        return(ns_parse_survival_output(x)[["median"]]);
 }

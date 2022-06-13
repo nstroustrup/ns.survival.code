@@ -3,6 +3,7 @@
  min_mllogis_theta <<- .00001;
 
 
+#' @export
 pmllogis <- function (q, shape = 1, scale = 1,theta=1,log.p=F) 
 {
 
@@ -39,6 +40,7 @@ pmllogis <- function (q, shape = 1, scale = 1,theta=1,log.p=F)
     return(ret)
 }
 
+#' @export
 qmllogis <- function (q, shape = 1, scale = 1,theta=1,log.p=F) {
 #stop("WJA")
     if (any(c(shape, scale) <= 0) || theta < 0) {
@@ -62,6 +64,7 @@ if (log.p == F){
 }
 
 
+#' @export
 dmllogis <- function (x, shape = 1, scale = 1,theta=1,log=F) 
 {
 	

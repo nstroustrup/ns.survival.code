@@ -1,4 +1,5 @@
 
+#' @export
 ns_get_percentile_from_sfit = function(sfit,percentile){
 	res = percentile;
 	if (length(which(percentile > 1)) != 0 || length(which(percentile < 0)) != 0)
