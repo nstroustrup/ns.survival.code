@@ -31,8 +31,21 @@ ns_parse_survival_output = function(x){
 	colnames(tmp) = colnames;
 	tmp <- as.data.frame(tmp,stringsAsFactors = F);
 	tmp$group = as.factor(tmp$group);
+	#the column names change in some versions of the survival package
+	if (!is.null(tmp[["rmean*"]])){
+			names(tmp)[names(tmp) == "rmean*"] = "*rmean"
+		}
+	if (is.null(tmp[["*rmean"]]))
+			stop(paste("Could not find *rmean column:",paste(names(tmp))))
 	tmp[["*rmean"]] = as.double(tmp[["*rmean"]]);
+	
+	if (!is.null(tmp[["se(rmean)"]])){
+		names(tmp)[names(tmp) == "se(rmean)"] = "*se(rmean)"
+	}
+	if (is.null(tmp[["*se(rmean)"]]))
+		stop(paste("Could not find se(rmean) column:",paste(names(tmp))))
 	tmp[["*se(rmean)"]] = as.double(tmp[["*se(rmean)"]]);
+	
 	tmp[["median"]] = as.double(tmp[["median"]]);
 	tmp[["events"]] = as.double(tmp[["events"]]);
 	tmp[["missing_data"]] = missing_data;
