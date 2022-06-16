@@ -498,10 +498,10 @@ ns_plot_hazard_by_groups <- function(deaths,group_column_name,
 				#print(paste("xl",paste(xl)))
 				
 				xl1 = floor(4*log10(xl[1]))/4;
-				xl2 = ceil(4*log10(xl[2]))/4;
+				xl2 = ceiling(4*log10(xl[2]))/4;
 				
 				if (xl1 > 1) xl1 = log10(floor(10^xl1))
-				if (xl2 > 1) xl2 = log10(ceil(10^xl2))
+				if (xl2 > 1) xl2 = log10(ceiling(10^xl2))
 				dx = (10^xl2-10^xl1)/8
 				xlm = seq(10^xl1,10^xl2,dx)
 			}
@@ -512,7 +512,7 @@ ns_plot_hazard_by_groups <- function(deaths,group_column_name,
 				ylm = seq(yl[1],yl[2],(yl[2]-yl[1])/4)
 			} else{
 				yl1 = floor(log10(yl[1]));
-				yl2 = ceil(log10(yl[2]));
+				yl2 = ceiling(log10(yl[2]));
 				ylm = 10^(seq(yl1,yl2,1))
 			}
 			if(!is.na(y_axis_tick))
@@ -527,10 +527,10 @@ ns_plot_hazard_by_groups <- function(deaths,group_column_name,
 				for (n in -4:3){
 					abline(h=10^n,col="#EEEEEE");
 				}
-				ab1 = ceil(xl[1]*2)/2;
+				ab1 = ceiling(xl[1]*2)/2;
 				ab2 = floor(xl[2]*2)/2;
 				if (ab1 < ab2)
-					for (n in seq(ceil(xl[1]*2)/2,floor(xl[2]*2)/2,.5))
+					for (n in seq(ceiling(xl[1]*2)/2,floor(xl[2]*2)/2,.5))
 						abline(v=n,col="#EEEEEE");
 			}
 		}
