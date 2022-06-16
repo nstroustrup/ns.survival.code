@@ -17,19 +17,20 @@ ns_get_rms_contrasts = function(model,reference_label,bj_group_levels){
 	l[["bj_group"]] = as.character(reference_label)
 	l2 = list();
 	l2[["bj_group"]] = as.character(bj_group_levels)
-	return(rms::contrast(model,l,l2,usebootcoef=TRUE))
+	return(rms::contrast(model,a=l2,b=l,usebootcoef=TRUE))
 }
 ns_get_rms_contrasts_2 = function(model,reference_label,bj_group_levels){
 	l = list();
 	l[["bj_group_2"]] = as.character(reference_label)
 	l2 = list();
 	l2[["bj_group_2"]] = as.character(bj_group_levels)
-	return(rms::contrast(model,l,l2,usebootcoef=TRUE))
+	return(rms::contrast(model,a=l2,b=l,usebootcoef=TRUE))
 }
 ns_process_bj_result = function(ret_prop,return_coefficients,bj_group,reference_label,dbg=F){
 	bj_residual = residuals(ret_prop,type="censored");
 	
 	if (return_coefficients){
+
 		#bj produces incorrect coefficient labels
 		#so we need to make them from scratch
 		nn=levels(bj_group);
@@ -42,7 +43,7 @@ ns_process_bj_result = function(ret_prop,return_coefficients,bj_group,reference_
 		#organize everything and return it.
 		N = length(ret_prop$coefficients);
 		
-		contr = ns_get_rms_contrasts(ret_prop,nn,reference_label);
+		contr = ns_get_rms_contrasts(ret_prop,bj_group_levels=nn,reference_label=reference_label);
 		coefficients = data.frame(bj_group=nn,
 			      coefficient= contr$Contrast,
 			      se = contr$SE,
@@ -72,12 +73,13 @@ ns_single_bj_group = function(formula,reference_group=NA,return_coefficients=T,d
 	if (class(deaths) != "Surv")
 		stop("Must provide a Surv object");
 	bj_group = as.factor(as.character(bj_group))
-	
 	if (is.na(reference_group))
 		reference_group = unique(bj_group)[1]
+	bj_group = relevel(bj_group,ref=as.character(reference_group))
 	reference_factor_level = which(as.character(levels(bj_group)) == as.character(reference_group))
 	num_groups = length(unique(bj_group))
 	#contrasts(bj_group) <- contr.treatment(num_groups,base=reference_factor_level);
+	contrasts(bj_group) = NULL;
 	#now we run the regression
 	ret_prop  <- bj(deaths~bj_group, x=TRUE, y=TRUE,time.inc=100000, control=list(iter.max=450,max.cycle=120,eps=10^-10))
 	
@@ -97,9 +99,10 @@ ns_single_bj = function(deaths,
 	if (!(bj_group_column %in% names(deaths)))
 		stop("The parameter bj_group_column  must be specified")
 	bj_group = as.factor(deaths[,bj_group_column])
-	if (is.na(reference_label)){
+	if (is.na(reference_label))
 		reference_label = unique(bj_group)[1]
-	}
+	
+	bj_group = relevel(bj_group,ref=as.character(reference_group))
 	reference_factor_level = which(as.character(levels(bj_group)) == as.character(reference_label))
 	
 	num_groups = length(unique(bj_group))
@@ -138,7 +141,7 @@ ns_multiple_bj = function(deaths,
 			time_column="Age.at.Death..d..Raw",
 			censored_column="Censored",
 			reference_group=NA,
-			reference_group_2=NA){
+			reference_group_2=NA,debug=F){
 			
 	options(datadist=NULL)
 
@@ -176,12 +179,15 @@ ns_multiple_bj = function(deaths,
 	}else{
 		multi_aft_reference_group_label	= as.character(levels(bj_group)[1]);
 	}	
+	bj_group = relevel(bj_group,ref=multi_aft_reference_group_label)
+	
 	multi_aft_reference_factor_level = which(as.character(levels(bj_group)) == multi_aft_reference_group_label)
 	if (length(multi_aft_reference_factor_level) == 0)
 			stop(paste("The specified reference group",multi_aft_reference_group_label,"is not present in the data"))
 			
 	if (length(levels(bj_group_2)) < 2){
-		
+	  if (debug)
+	    browser()
 		#if there is only one device, we can do a single regression
 		#contrasts(bj_group) <- contr.treatment(length(levels(bj_group)),base=multi_aft_reference_factor_level);
 		contrasts(bj_group) = NULL;
@@ -190,8 +196,9 @@ ns_multiple_bj = function(deaths,
 		data_dist <<- datadist(regression_data);
 		options(datadist="data_dist")
 		scaling_device_bj_model <- bj(d_surv~bj_group, data=regression_data,time.inc=.0001, control=list(iter.max=60), x=TRUE, y=TRUE)
-		group_coefficients = ns_get_rms_contrasts(scaling_device_bj_model,reference_group,levels(bj_group))
+		group_coefficients = ns_get_rms_contrasts(scaling_device_bj_model,reference_label=reference_group,bj_group_levels=levels(bj_group))
 		group_coefficients_levels = levels(bj_group)
+	
 		
 		r_prop <- resid(scaling_device_bj_model, type="censored")
 		bj_residual = exp(r_prop[,1])
@@ -216,10 +223,14 @@ ns_multiple_bj = function(deaths,
 	if (!is.na(reference_group_2)){
 			multi_aft_reference_device_label = as.character(reference_group_2);
 	}else multi_aft_reference_device_label = as.character(levels(bj_group_2)[1])
+	bj_group_2 = relevel(bj_group_2,multi_aft_reference_device_label)
+	
 	multi_aft_reference_device_level = which(as.character(levels(bj_group_2)) == multi_aft_reference_device_label)
 	if (length(multi_aft_reference_device_level) == 0){
 		stop(paste("Requested reference device ",multi_aft_reference_device_label, "could not be found among levels:",paste(levels(bj_group_2))))	
 	}
+	
+	
 	#stop(multi_aft_reference_device_level)
 	#contrasts(bj_group_2) <- contr.treatment(length(levels(bj_group_2)),base=multi_aft_reference_device_level);	
 	contrasts(bj_group_2) = NULL;
@@ -255,31 +266,33 @@ ns_multiple_bj = function(deaths,
 		scaling_device_bj_model <- bj(Surv(t,Censored)~bj_group + bj_group_2, data=regression_data,time.inc=.0001, control=list(iter.max=60), x=TRUE, y=TRUE)
 	
 	}
-	
 	#if there was only one covariate
 	#the coefficient for that covariate is 0,
 	#and the intercept exists in the device coefficient array.
-	if (length(levels(bj_group)) < 2){
-		
-		group_coefficients_levels = levels(bj_group)
+	group_coefficients_levels = levels(bj_group)
+	group_coefficients_levels = group_coefficients_levels[group_coefficients_levels != as.character(multi_aft_reference_group_label)]
+	
+	if (length(group_coefficients_levels) == 1){
 		
 		#we get a "no-effect" RMS contrast via subterfuge
-		group_coefficients = ns_get_rms_contrasts_2(scaling_device_bj_model,multi_aft_reference_device_label,multi_aft_reference_device_label)
+		group_coefficients = ns_get_rms_contrasts_2(scaling_device_bj_model,bj_group_levels=multi_aft_reference_device_label,reference_label=multi_aft_reference_device_label)
 		
 		intercept = scaling_device_bj_model$coefficients[["Intercept"]]
-		group_2_coefficients = ns_get_rms_contrasts_2(scaling_device_bj_model,multi_aft_reference_device_label,levels(bj_group_2));
+		group_2_coefficients = ns_get_rms_contrasts_2(scaling_device_bj_model,reference_levels=multi_aft_reference_device_label,bj_group_levels=levels(bj_group_2));
 		
 	}else{
 		#if there were multiple covariates
-		#the intercept exists in the group coefficient array.
-		group_coefficients = ns_get_rms_contrasts(scaling_device_bj_model,multi_aft_reference_group_label,levels(bj_group))
-		group_coefficients_levels = levels(bj_group)
-		#browser()
-		group_2_coefficients = ns_get_rms_contrasts_2(scaling_device_bj_model,multi_aft_reference_device_label,levels(bj_group_2))
+		#the intercept exists in the group coefficient array.	
+	  
+		group_coefficients = ns_get_rms_contrasts(scaling_device_bj_model,reference_label=multi_aft_reference_group_label,bj_group_levels=group_coefficients_levels)
+
+	#	browser()
+		group_2_coefficients = ns_get_rms_contrasts_2(scaling_device_bj_model,reference_label=multi_aft_reference_device_label,bj_group_levels=levels(bj_group_2))
 		#print("AUTO")
 		#browser()
 		intercept = scaling_device_bj_model$coefficients[["Intercept"]]
 	}
+
 	group_coefficients$N = 0;
 	for (i in 1:length(group_coefficients[["Contrast"]]))
 		group_coefficients$N[i] = sum(d$Event.Frequency[bj_group == group_coefficients$group[i] & Censored == 0])
