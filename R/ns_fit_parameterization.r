@@ -1,4 +1,4 @@
-
+#' @export
 ns_pweiner_diff= function(t,b){
 	return( 
 		( b/sqrt(2*(pi*t)^3) )*
@@ -6,7 +6,7 @@ ns_pweiner_diff= function(t,b){
 	   gsl::gamma_inc(0,(b^2)/(2*t))
 	)
 }
-
+#' @export
 ns_invguass_boundary_parameters = function(mu,sigma2,drift_rate){
 		boundary = drift_rate*mu;
 		new_sigma2 = sigma2*boundary^2;
@@ -17,7 +17,7 @@ ns_invguass_boundary_parameters = function(mu,sigma2,drift_rate){
 		)
 	)
 }
-
+#' @export
 ns_loglogistic_alpha_weibull_equivalent <- function(t,shape,scale){
 	return( shape -  ( shape*( (t/scale)^shape ) )/( 1+ (t/scale)^shape ) );
 }
@@ -50,6 +50,7 @@ if (0){
 
 
 #STAR::pinvgauss modified to correctly handle very small sigma2
+#' @export
 ns_pinvgauss =compiler::cmpfun(function (q, mu = 1, sigma2 = 1, boundary = NULL, lower.tail = TRUE, log.p = FALSE) {
 	#print(paste(mu,sigma2));
     if (any(q < 0)) 
@@ -107,7 +108,7 @@ ns_pinvgauss =compiler::cmpfun(function (q, mu = 1, sigma2 = 1, boundary = NULL,
         )
 })
 pns_invgauss = ns_pinvgauss;
-
+#' @export
 dns_invgauss = compiler::cmpfun(function (x, mu = 1, sigma2 = 1, boundary = NULL, log = FALSE) 
 {
     if (any(x <= 0)) 
@@ -132,7 +133,7 @@ dns_invgauss = compiler::cmpfun(function (x, mu = 1, sigma2 = 1, boundary = NULL
         tmp <- exp(tmp)
     tmp
 })
-
+#' @export
 qns_invgauss = compiler::cmpfun(function(p, mu = 1, sigma2 = 1, boundary = NULL) 
 {
     if (any(p < 0 | p > 1)) 
@@ -182,7 +183,7 @@ qns_invgauss = compiler::cmpfun(function(p, mu = 1, sigma2 = 1, boundary = NULL)
         uniroot(h, interval)$root
     })
 })
-
+#' @export
 custom.ns_invgauss <- list(name="ns_invgauss",
 	pars=c("mu","sigma2"),
 	location="mu",
@@ -193,7 +194,7 @@ custom.ns_invgauss <- list(name="ns_invgauss",
 
 
 #modified from STAR::invgaussMLE
-
+#' @export
 ns_invgaussMLE = function (yi, ni = numeric(length(yi)) + 1, si = numeric(length(yi)) + 1, parameterization = "sigma2",inits=NA) 
 {
     if (inherits(yi, "spikeTrain")) 
@@ -323,7 +324,7 @@ ns_invgaussMLE = function (yi, ni = numeric(length(yi)) + 1, si = numeric(length
     class(result) <- "durationFit"
     return(result)
 }
-
+#' @export
 ns_fit_invgauss <-function(surv_obj,inits=NA){
 	#d = data.frame(t=surv_obj[,1],cc=surv_obj[,2]);
 	
