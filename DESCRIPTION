@@ -5,7 +5,7 @@ Authors@R:
     person("Nicholas", "Stroustrup", , "nstroustrup@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9530-7301"))
 Description: R code for working with survival data March 2022
-Imports: flexsurv,rms,compiler,survival,muhaz,zoo,bshazard,eha,STAR,gsl,Hmisc
+Imports: flexsurv,rms,compiler,survival,muhaz,zoo,bshazard,eha,gsl,Hmisc
 License: 
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

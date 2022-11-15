@@ -991,9 +991,6 @@ ns_get_parametric_survival = function(tt,parameters,parameterization,survival_by
 	else if (parameterization == "weibull_gamma_frailty"){
 		p = do.call(paste0(suffix,"mllogis"),args=list(tt,scale=parameters$weibull_gamma_frailty_scale,shape=parameters$weibull_gamma_frailty_shape,theta=parameters$weibull_gamma_frailty_theta));
 	}
-	else if (parameterization == "gompertz_gamma_frailty"){
-		p = do.call(paste0(suffix,"mgompertz"),args=list(tt,shape=parameters$gompertz_gamma_frailty_shape,rate=parameters$gompertz_gamma_frailty_rate,theta=parameters$gompertz_gamma_frailty_theta));
-	}
 	else if (parameterization == "gompertz_makeham"){
 		#browser()
 		p = do.call(paste0("eha::",suffix,"makeham"),args=list(tt,shape=c(parameters$gompertz_makeham_shape,parameters$gompertz_makeham_constant),1/parameters$gompertz_makeham_rate));
