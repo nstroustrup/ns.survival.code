@@ -272,7 +272,7 @@ ns_multiple_bj = function(deaths,
 	group_coefficients_levels = levels(bj_group)
 	group_coefficients_levels = group_coefficients_levels[group_coefficients_levels != as.character(multi_aft_reference_group_label)]
 	
-	if (length(group_coefficients_levels) == 1){
+	if (length(group_coefficients_levels) == 0){
 		
 		#we get a "no-effect" RMS contrast via subterfuge
 		group_coefficients = ns_get_rms_contrasts_2(scaling_device_bj_model,bj_group_levels=multi_aft_reference_device_label,reference_label=multi_aft_reference_device_label)
