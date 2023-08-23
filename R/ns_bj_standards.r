@@ -278,7 +278,7 @@ ns_multiple_bj = function(deaths,
 		group_coefficients = ns_get_rms_contrasts_2(scaling_device_bj_model,bj_group_levels=multi_aft_reference_device_label,reference_label=multi_aft_reference_device_label)
 		
 		intercept = scaling_device_bj_model$coefficients[["Intercept"]]
-		group_2_coefficients = ns_get_rms_contrasts_2(scaling_device_bj_model,reference_levels=multi_aft_reference_device_label,bj_group_levels=levels(bj_group_2));
+		group_2_coefficients = ns_get_rms_contrasts_2(scaling_device_bj_model,reference_label=multi_aft_reference_device_label,bj_group_levels=levels(bj_group_2));
 		
 	}else{
 		#if there were multiple covariates
