@@ -341,7 +341,7 @@ ns_fit_invgauss <-function(surv_obj,inits=NA){
 }
 
 #' @export
-ns_fit_parameterization_group = function(formula,parametric_fits){
+ns_fit_parameterization_group = function(formula,parametric_fits,...){
 	ff = terms(formula);
 	rr = eval.parent(attr(ff,"variables"))
 	pp = attr(ff,"factors")
@@ -356,7 +356,7 @@ ns_fit_parameterization_group = function(formula,parametric_fits){
 	#contrasts(bj_group) <- contr.treatment(num_groups,base=reference_factor_level);
 	for (g in unique(grouping)){
 		dd = deaths[grouping==g,];
-		par_fit = ns_fit_parameterization(dd,c("inverse_gaussian"),death_column=1,censored_column=2,rev_censored_group=F);
+		par_fit = ns_fit_parameterization(dd,c("inverse_gaussian"),death_column=1,censored_column=2,rev_censored_group=F,...);
 	#	browser()
 		par_fit$fits$group = g;
 		fits = rbind(par_fit$fits,fits);
@@ -367,7 +367,7 @@ ns_fit_parameterization_group = function(formula,parametric_fits){
 }
 
 #' @export
-ns_fit_parameterization <- function(deaths,parametric_fits=NA,death_column="Age.at.Death..d..Raw",censored_column="Censored",rev_censored_group=T){
+ns_fit_parameterization <- function(deaths,parametric_fits=NA,death_column="Age.at.Death..d..Raw",censored_column="Censored",rev_censored_group=T,...){
 
 	lognormal_scale <- NA;
 	lognormal_intercept <- NA;
@@ -491,7 +491,7 @@ ns_fit_parameterization <- function(deaths,parametric_fits=NA,death_column="Age.
 	if ("lognormal" %in% parametric_fits){
 	tryCatch(
 		{	
-			model_loglog <- flexsurvreg(survival_object~1,dist="lnorm");
+			model_loglog <- flexsurvreg(survival_object~1,dist="lnorm",...);
 			lognormal_regression_model <- model_loglog
 
 			lognormal_intercept = model_loglog$res[1]
@@ -510,7 +510,7 @@ ns_fit_parameterization <- function(deaths,parametric_fits=NA,death_column="Age.
 		tryCatch(
 		{
 			
-			model_weibull <- flexsurvreg(survival_object~1,dist="weibull");
+			model_weibull <- flexsurvreg(survival_object~1,dist="weibull",...);
 			weibull_regression_model <- model_weibull;
 
 			weibull_shape = model_weibull$res[1]
@@ -561,7 +561,7 @@ ns_fit_parameterization <- function(deaths,parametric_fits=NA,death_column="Age.
 	if ("weibull_gamma_frailty" %in% parametric_fits){
 		tryCatch(
 		{
-			model_mllogis <- flexsurvreg(survival_object~1,dist=custom.mllogis);
+			model_mllogis <- flexsurvreg(survival_object~1,dist=custom.mllogis,...);
 			weibull_gamma_frailty_regression_model <- model_mllogis;
 			weibull_gamma_frailty_shape = model_mllogis$res[1]
 			weibull_gamma_frailty_scale = model_mllogis$res[2]
@@ -601,7 +601,7 @@ ns_fit_parameterization <- function(deaths,parametric_fits=NA,death_column="Age.
 	if (("gompertz_gamma_frailty" %in% parametric_fits)){
 		tryCatch(
 			{
-			model_mgompertz <- flexsurvreg(survival_object~1,dist=custom.mgompertz);
+			model_mgompertz <- flexsurvreg(survival_object~1,dist=custom.mgompertz,...);
 			gompertz_gamma_frailty_regression_model <- model_mgompertz;
 
 			gompertz_gamma_frailty_shape = model_mgompertz$res[1]
@@ -628,6 +628,7 @@ ns_fit_parameterization <- function(deaths,parametric_fits=NA,death_column="Age.
 			model_mgompertz_alt <- flexsurvreg(survival_object~1,dist=custom.mgompertz2#,
 							#	method="Nelder-Mead"#,
 							#	control=list(trace=99)
+							,...
 								);
 						#		stop()
 			gompertz_alt_gamma_frailty_regression_model <- model_mgompertz_alt;
@@ -654,7 +655,7 @@ ns_fit_parameterization <- function(deaths,parametric_fits=NA,death_column="Age.
 		#tryCatch(
 		#	{
 			browser()
-			model_makeham <- flexsurvreg(survival_object~1,dist=custom.makeham);
+			model_makeham <- flexsurvreg(survival_object~1,dist=custom.makeham,...);
 			gompertz_makeham_regression_model <- model_makeham;
 
 			gompertz_makeham_shape = model_makeham$res[1]
@@ -680,7 +681,7 @@ ns_fit_parameterization <- function(deaths,parametric_fits=NA,death_column="Age.
 		tryCatch(
 			{
 
-			model_f <- flexsurvreg(survival_object~1,dist="genf");
+			model_f <- flexsurvreg(survival_object~1,dist="genf",...);
 			generalized_f_regression_model <- model_f;
 			generalized_f_mu = model_f$res[1]
 			generalized_f_sigma = model_f$res[2]
@@ -710,7 +711,7 @@ ns_fit_parameterization <- function(deaths,parametric_fits=NA,death_column="Age.
 					inv.transforms=c(base::exp, base::exp),
 					inits=function(t){ c(1, median(t)) })
 				#browser()
-				model_loglogistic <- flexsurvreg(survival_object~1,dist=custom.llogis);
+				model_loglogistic <- flexsurvreg(survival_object~1,dist=custom.llogis,...);
 
 				loglogistic_regression_model <- model_loglogistic;
 				loglogistic_shape = model_loglogistic$res[1]
@@ -741,7 +742,7 @@ ns_fit_parameterization <- function(deaths,parametric_fits=NA,death_column="Age.
 	if (("gompertz" %in% parametric_fits)){
 		tryCatch(
 			{
-				model_gompertz <- flexsurvreg(survival_object~1,dist="gompertz")
+				model_gompertz <- flexsurvreg(survival_object~1,dist="gompertz",...)
 				gompertz_regression_model <- model_gompertz;
 				gompertz_shape <- model_gompertz$res[1]
 				gompertz_rate <- model_gompertz$res[2]

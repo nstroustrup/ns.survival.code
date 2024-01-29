@@ -1,6 +1,7 @@
 #Implements the closed form distribution of a weibull distribution with gamma frailty
 
- min_mllogis_theta <<- .00001;
+
+min_mllogis_theta <<- .00001;
 
 
 #' @export
