@@ -55,13 +55,7 @@ ns_process_bj_result = function(ret_prop,return_coefficients,bj_group_1,referenc
 		#organize everything and return it.
 		N = length(ret_prop$coefficients);
 		
-		contr = ns_get_rms_contrasts(ret_prop,bj_group_levels=nn,reference_label=reference_label);
-		coefficients = data.frame(bj_group_1=nn,
-			      coefficient= contr$Contrast,
-			      se = contr$SE,
-			      lower=contr$Lower,
-			      upper=contr$Upper,
-			      p=contr$Pvalue);
+		coefficients = ns_get_rms_contrasts(ret_prop,bj_group_levels=nn,reference_label=reference_label);
 		   if (dbg)browser()
 		
 		rownames(coefficients) = NULL;
